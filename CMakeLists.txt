@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -15,13 +16,11 @@ find_package(catkin REQUIRED COMPONENTS
 ################################################
 
 add_message_files(
-  FILES
-  LD_data.msg
+  FILES LD_data.msg
 )
 
 add_service_files(
-  FILES
-  LD_check.srv
+  FILES LD_check.srv
 )
 
 generate_messages(
@@ -30,7 +29,7 @@ generate_messages(
 )
 
 catkin_package(
-  INCLUDE_DIRS include msg srv
+  INCLUDE_DIRS include
   LIBRARIES Load_Balancer
   CATKIN_DEPENDS roscpp rospy std_msgs
   DEPENDS system_lib
@@ -46,6 +45,9 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 add_executable(${PROJECT_NAME}_node nodes/Load_Balancer_node.cpp)
+add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
 target_link_libraries(${PROJECT_NAME}_node
   ${catkin_LIBRARIES}
 )
